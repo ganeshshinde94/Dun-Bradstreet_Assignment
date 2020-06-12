@@ -1,0 +1,42 @@
+/* SQL Query is at the Bottom */
+
+BEGIN TRANSACTION;
+
+/* Create a table called NAMES */
+CREATE TABLE Companies(Id integer PRIMARY KEY, Name text, City text, Country text, Revenue Int );
+
+/* Create few records in this table */
+INSERT INTO Companies VALUES(1,'Company1', 'SFO','USA', 100);
+INSERT INTO Companies VALUES(2,'Company2', 'NYC','USA',200 );
+INSERT INTO Companies VALUES(3,'Company3', 'HOU', 'USA', 90);
+INSERT INTO Companies VALUES(4,'Company4', 'LA', 'USA', 70);
+INSERT INTO Companies VALUES(5,'Company5', 'BOM', 'IND', 300);
+COMMIT;
+
+/* Display all the records from the table */
+/*SELECT * FROM Companies;*/
+
+/* Create a table called Offices */
+
+CREATE TABLE Offices(Loc_id integer, Off_Id integer, off_Name text, off_City text, Off_Country text, FOREIGN KEY(Off_Id) REFERENCES Companies(Id));
+
+
+INSERT INTO Offices VALUES( 1, 1, 'office1', 'London', 'United Kingdom');
+INSERT INTO Offices VALUES( 2, 1, 'office2', 'Bijing', 'China');
+INSERT INTO Offices VALUES( 3, 1, 'office3', 'Rio', 'Brazil');
+INSERT INTO Offices VALUES( 4, 1, 'office4', 'Masco', 'Russia');
+INSERT INTO Offices VALUES( 5, 1, 'office5', 'Frankfurt', 'Germany');
+INSERT INTO Offices VALUES( 6, 3, 'office1', 'Paris', 'France');
+INSERT INTO Offices VALUES( 7, 3, 'office2', 'Toranto', 'Canada');
+INSERT INTO Offices VALUES( 8, 3, 'office3', 'Tokyo', 'Japan');
+INSERT INTO Offices VALUES( 9, 4, 'office1', 'Sydney', 'Austrelia');
+INSERT INTO Offices VALUES( 10,5, 'office1', 'Wellington', 'New Zealand');
+
+/* SQL Query return the expected Output */
+
+SELECT com.Name, com.Revenue, Count(off.Loc_id) as number_of_offices
+FROM Companies com join Offices off
+on com.Id = off.Off_Id
+group by com.Id, com.Revenue
+having count(off.Loc_id) < 5;
+
